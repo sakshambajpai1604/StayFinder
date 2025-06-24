@@ -7,14 +7,22 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const res = await fetch('http://localhost:5000/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
     });
+
+    if (!res.ok) {
+        const err = await res.json();
+        alert(err.error || 'Login failed');
+        return;
+    }
+
     const data = await res.json();
     localStorage.setItem('token', data.token);
     alert('Login successful');
   };
+
 
   return (
     <form onSubmit={handleLogin} className="p-4 max-w-md mx-auto">
